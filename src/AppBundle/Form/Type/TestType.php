@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
@@ -21,28 +22,37 @@ class TestType extends AbstractType
                     '1' => 1,
                     '2' => 2,
                 ],
-                'data' => 2,
+                'required' => false,
+                'placeholder' => 'choice 1',
             ])
         ;
-
+        
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
                 $form = $event->getForm();
-                
+                $form->add('field2', ChoiceType::class, [
+                    'choices' => [],
+                    'required' => false,
+                    'placeholder' => 'choice 2',
+                ]);
+            }
+        );
+        
+        $builder->get('field1')->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $form = $event->getForm()->getParent();
+                $value1 = $event->getForm()->getData();
                 $treeChoices = [
                     1 => [10 => 10, 11 => 11],
                     2 => [20 => 20, 21 => 21],
                 ];
-                
-                /* @var $field1 \Symfony\Component\Form\Form */
-                $field1 = $form->get('field1');
-                $value1 = $field1->getData() ?: 1;
-                
-                $choices = $treeChoices[$value1];
-
+                $choices = $value1 ? $treeChoices[$value1] : [];
                 $form->add('field2', ChoiceType::class, [
                     'choices' => $choices,
+                    'required' => false,
+                    'placeholder' => 'choice 2',
                 ]);
             }
         );

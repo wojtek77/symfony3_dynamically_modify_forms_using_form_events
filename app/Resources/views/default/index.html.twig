@@ -6,6 +6,16 @@
             <div id="welcome">
                 <h1><span>Welcome to</span> Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</h1>
             </div>
+            
+            <div id="form">
+                
+                {{ form_start(form) }}
+                    {{ form_row(form.field1) }}
+                    {{ form_row(form.field2) }}
+                    <button type="submit">send</button>
+                {{ form_end(form) }}
+                
+            </div>
 
             <div id="status">
                 <p>

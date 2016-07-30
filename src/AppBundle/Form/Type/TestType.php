@@ -36,6 +36,11 @@ class TestType extends AbstractType
                     'required' => false,
                     'placeholder' => 'choice 2',
                 ]);
+                $form->add('field3', ChoiceType::class, [
+                    'choices' => [],
+                    'required' => false,
+                    'placeholder' => 'choice 3',
+                ]);
             }
         );
         
@@ -45,7 +50,9 @@ class TestType extends AbstractType
                 
                 $form = $event->getForm();
                 $data = $event->getData();
-                $value1 = $data['field1'];
+                
+                /* changed field1 */
+                $value1 = isset($data['field1']) ? $data['field1'] : null;
                 $treeChoices = [
                     1 => [10 => 10, 11 => 11],
                     2 => [20 => 20, 21 => 21],
@@ -55,6 +62,21 @@ class TestType extends AbstractType
                     'choices' => $choices,
                     'required' => false,
                     'placeholder' => 'choice 2',
+                ]);
+                
+                /* changed field2 */
+                $value2 = isset($data['field2']) ? $data['field2'] : null;
+                $treeChoices = [
+                    10 => [100 => 100, 101 => 101],
+                    11 => [110 => 110, 111 => 111],
+                    20 => [200 => 200, 201 => 201],
+                    21 => [210 => 210, 211 => 211],
+                ];
+                $choices = $value2 ? $treeChoices[$value2] : [];
+                $form->add('field3', ChoiceType::class, [
+                    'choices' => $choices,
+                    'required' => false,
+                    'placeholder' => 'choice 3',
                 ]);
             }
         );

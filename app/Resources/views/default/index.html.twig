@@ -12,17 +12,17 @@
                 {{ form_start(form) }}
                     {{ form_row(form.field1) }}
                     {{ form_row(form.field2) }}
+                    {{ form_row(form.field3) }}
                     <button type="submit">send</button>
                 {{ form_end(form) }}
                 
             </div>
                 
             <script>
-                var $field1 = $('#test_field1');
-                $field1.change(function() {
+                $('form').on('change', '#test_field1', function() {
                   var $form = $(this).closest('form');
                   var data = {};
-                  data[$field1.attr('name')] = $field1.val();
+                  data[$(this).prop('name')] = $(this).val();
                   $.ajax({
                     url : $form.attr('action'),
                     type: $form.attr('method'),
@@ -30,6 +30,25 @@
                     success: function(html) {
                       $('#test_field2').replaceWith(
                         $(html).find('#test_field2')
+                      );
+                      $('#test_field3').replaceWith(
+                        $(html).find('#test_field3')
+                      );
+                    }
+                  });
+                });
+                
+                $('form').on('change', '#test_field2', function() {
+                  var $form = $(this).closest('form');
+                  var data = {};
+                  data[$(this).prop('name')] = $(this).val();
+                  $.ajax({
+                    url : $form.attr('action'),
+                    type: $form.attr('method'),
+                    data : data,
+                    success: function(html) {
+                      $('#test_field3').replaceWith(
+                        $(html).find('#test_field3')
                       );
                     }
                   });

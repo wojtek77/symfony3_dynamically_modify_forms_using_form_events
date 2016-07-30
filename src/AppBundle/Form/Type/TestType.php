@@ -39,11 +39,13 @@ class TestType extends AbstractType
             }
         );
         
-        $builder->get('field1')->addEventListener(
-            FormEvents::POST_SUBMIT,
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
             function (FormEvent $event) {
-                $form = $event->getForm()->getParent();
-                $value1 = $event->getForm()->getData();
+                
+                $form = $event->getForm();
+                $data = $event->getData();
+                $value1 = $data['field1'];
                 $treeChoices = [
                     1 => [10 => 10, 11 => 11],
                     2 => [20 => 20, 21 => 21],
